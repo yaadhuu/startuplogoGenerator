@@ -2,3 +2,4 @@ streamlit==1.17.0
 groq==0.4.0
 openai==0.27.0
 python-dotenv==1.0.0
+altair==4.2.2
