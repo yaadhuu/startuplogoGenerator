@@ -12,8 +12,8 @@ API_KEY = config.get("GroqAPIKey")
 OPENAI_API_KEY = config.get("OpenAIAPIKey")
 ASSISTANT_NAME = config.get("Assistantname", "Ozilly AI")
 
-client = Groq(api_key=API_KEY)
-openai.api_key = OPENAI_API_KEY
+client = Groq(api_key="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")
+
 
 POSITIVE_FEEDBACK = [
     "yes", "good", "love it", "like it", "perfect", "awesome", "great",
