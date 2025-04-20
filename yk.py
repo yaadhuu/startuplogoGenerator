@@ -1,16 +1,13 @@
 import streamlit as st
 import json
 from groq import Groq
-from dotenv import dotenv_values
 import datetime
-import os
 import openai
 
-# Load API key and assistant name from .env
-config = dotenv_values(".env")
-API_KEY = config.get("GroqAPIKey")
-OPENAI_API_KEY = config.get("OpenAIAPIKey")
-ASSISTANT_NAME = config.get("Assistantname", "Ozilly AI")
+# Direct API keys
+API_KEY = "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"
+
+ASSISTANT_NAME = "Ozilly AI"
 
 client = Groq(api_key=API_KEY)
 openai.api_key = OPENAI_API_KEY
@@ -42,7 +39,6 @@ Logo Idea: <logo>
 """
 
 SYSTEM_MESSAGES = [{"role": "system", "content": SYSTEM_PROMPT}]
-
 HISTORY_FILE = "prompts_and_results.json"
 
 def now():
@@ -111,13 +107,12 @@ def generate_dalle_logo(prompt):
             n=1
         )
         return response.data[0].url
-    except Exception as e:
+    except Exception:
         return None
 
-# Streamlit UI
+# UI
 st.set_page_config(page_title="Ozilly AI - Startup Name Generator", layout="wide")
 
-# Premium Brand Header
 st.markdown("""
     <div style="text-align:center; margin-bottom: 3rem; animation: fadeIn 1.2s ease-in-out;">
         <h1 style="font-size: 4rem; font-weight: 900; color: #e50914; font-family: 'Netflix Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;">
@@ -183,12 +178,11 @@ if generate_logo:
         if dalle_image_url:
             st.image(dalle_image_url, caption="AI-Generated Logo")
         else:
-            st.warning("⚠️ DALL·E logo generation failed. Here's a placeholder instead.")
+            st.warning("⚠️ Unfortunately, the logo could not be generated due to limitations or GPU issues with Hugging Face OpenJourney.")
             st.image("https://via.placeholder.com/400x200.png?text=Logo+for+" + name.replace(" ", "+"), caption="AI Logo Sketch Simulation")
     else:
         st.warning("⚠️ Generate a startup name first before generating the logo.")
 
-# Feedback Section
 if 'generated_name' in st.session_state:
     feedback = st.text_input("🗣️ What do you think of this suggestion?")
     if is_negative_feedback(feedback):
@@ -204,12 +198,10 @@ if 'generated_name' in st.session_state:
             st.session_state.generated_logo = logo
         else:
             st.error("⚠️ Couldn't parse the AI's response. Please try again.")
-
     elif is_positive_feedback(feedback):
         st.balloons()
         st.success("Glad you liked it! You can enter a new idea above.")
 
-# History Display
 if show_history:
     st.markdown("### 📜 History")
     try:
@@ -223,4 +215,4 @@ if show_history:
         st.warning("No history available yet.")
 
 st.markdown("---")
-st.caption("Crafted with ❤️ using LLaMA 3 via Groq API + DALL·E 3 via OpenAI • By Ozilly")
+st.caption("Crafted with ❤️ using LLaMA 3 via Groq API + Hugging Face OpenJourney • By Ozilly Ai")
